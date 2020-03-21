@@ -12,6 +12,7 @@ function install {
 }
 
 install git
+install gitk
 install vim
 install ctags
 install tmux
