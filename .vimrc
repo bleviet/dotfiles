@@ -151,8 +151,6 @@ if $VIMENV == 'prev'
   set noswapfile
 endif
 
-set noesckeys
-
 set nocompatible
 
 " Airline status line config
