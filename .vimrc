@@ -11,14 +11,18 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 
 
 " Required for vundle
-"filetype plugin indent on 
-filetype plugin on 
+"filetype plugin indent on
+filetype plugin on
 
 " Highlighting
 syntax on
@@ -53,7 +57,7 @@ set hlsearch
 set showmatch
 
 " Enable jumping into files in a search buffer
-set hidden 
+set hidden
 
 " Make backspace a bit nicer
 set backspace=eol,start,indent
@@ -64,6 +68,11 @@ set tabstop=4
 set softtabstop=4
 set shiftround
 set expandtab
+
+set clipboard+=unnamed " use system clipboard
+set paste	       " paste from system clipboard or from vim
+set go+=a	       " visual selection automatically copied to the clipboard
+
 
 " Disable mouse
 set mouse=
@@ -78,7 +87,7 @@ if &t_Co == 256
 endif
 
 " Switch tabs
-map 8 <Esc>:tabe 
+map 8 <Esc>:tabe
 map 9 gT
 map 0 gt
 
