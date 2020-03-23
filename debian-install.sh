@@ -11,6 +11,8 @@ function install {
   fi
 }
 
+sudo apt-get update
+install fonts-powerline
 install git
 install gitk
 install vim
