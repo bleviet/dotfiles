@@ -1,0 +1,11 @@
+git clone git@github.com:bleviet/cip.git
+git clone git@github.com:bleviet/wiki.git
+git clone git@github.com:bleviet/playground.git
+git clone git@github.com:bleviet/xinhsushi.git
+git clone git@github.com:bleviet/docker.git
+git clone git@github.com:bleviet/dotfiles.git
+git clone git@github.com:UVVM/UVVM.git
+git clone git@github.com:VUnit/vunit.git
+git clone git@github.com:VLSI-EDA/PoC.git
+git clone git@github.com:OSVVM/OSVVM.git
+git clone git@github.com:kraigher/rust_hdl.git
