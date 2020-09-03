@@ -119,3 +119,4 @@ fi
 
 # Patent Pending Prompt
 export PS1="${nameC}\u${atC}@${hostC}\h:${pathC}\w${gitC}\$(gitBranch) ${pointerC}\$${normalC} "
+export PATH=$PATH:~/miniconda/bin
