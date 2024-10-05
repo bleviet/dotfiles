@@ -10,6 +10,10 @@ bash install_nerdfonts.sh
 bash install_fd.sh
 bash install_ripgrep.sh
 bash install_lazygit.sh
+bash install_nodejs.sh
+
+# Install pyright
+sudo npm install -g pyright
 
 # Stow lazyvim configuration
 cd ../stow
