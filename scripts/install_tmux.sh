@@ -93,3 +93,7 @@ cd ..
 rm -rf "tmux-${TMUX_VERSION}" "$TMUX_TAR"
 
 info "tmux ${TMUX_VERSION} installed successfully!"
+
+# Setup Configuration
+cd ../stow/
+stow -t $HOME tmux
