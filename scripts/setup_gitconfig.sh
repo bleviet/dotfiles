@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Prompt for user information
-read -p "Enter your name: " user_name
-read -p "Enter your email: " user_email
+# Use environment variables or prompt for user information
+user_name=${GIT_USER_NAME:-$(read -p "Enter your name: " temp && echo "$temp")}
+user_email=${GIT_USER_EMAIL:-$(read -p "Enter your email: " temp && echo "$temp")}
 
 # Create the .gitconfig file with user-specific information
 cat <<EOL >~/.gitconfig
