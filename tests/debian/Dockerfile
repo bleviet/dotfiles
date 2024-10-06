@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:latest
 
 # Set environment variable for non-interactive installations
 ENV DEBIAN_FRONTEND=noninteractive
@@ -41,3 +41,4 @@ WORKDIR /home/user/dotfiles
 
 # Run the setup script as the non-root user
 RUN yes | bash setup_env.sh
+
