@@ -1,24 +1,18 @@
 #!/bin/bash
 
 # Backup and stow bash configuration files
-echo "Backing up bash configuration files..."
-mv $HOME/.bash_profile{,.bak}
-mv $HOME/.bashrc{,.bak}
-mv $HOME/.bashrc.d{,.bak}
+[ -f $HOME/.bash_profile ] && mv $HOME/.bash_profile{,.bak}
+[ -f $HOME/.bashrc ] && mv $HOME/.bashrc{,.bak}
+[ -d $HOME/.bashrc.d ] && mv $HOME/.bashrc.d{,.bak}
 
 # Backup LazyVim configuration
-echo "Backing up LazyVim configuration..."
-# required
-mv $HOME/.config/nvim{,.bak}
-
-# optional but recommended
-mv $HOME/.local/share/nvim{,.bak}
-mv $HOME/.local/state/nvim{,.bak}
-mv $HOME/.cache/nvim{,.bak}
+[ -d $HOME/.config/nvim ] && mv $HOME/.config/nvim{,.bak}
+[ -d $HOME/.local/share/nvim ] && mv $HOME/.local/share/nvim{,.bak}
+[ -d $HOME/.local/state/nvim ] && mv $HOME/.local/state/nvim{,.bak}
+[ -d $HOME/.cache/nvim ] && mv $HOME/.cache/nvim{,.bak}
 
 # Backup tmux configuration
-echo "Backing up tmux configuration..."
-mv $HOME/.tmux.conf{,.bak}
+[ -f $HOME/.tmux.conf ] && mv $HOME/.tmux.conf{,.bak}
 
 cd ../stow
 # Stow bash configuration files
