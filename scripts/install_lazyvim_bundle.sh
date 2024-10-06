@@ -4,17 +4,13 @@
 set -e
 
 # Install recommended tools for lazyvim
-bash install_rust.sh
-bash install_neovim.sh
-bash install_nerdfonts.sh
-bash install_fd.sh
-bash install_ripgrep.sh
-bash install_lazygit.sh
-bash install_nodejs.sh
+source install_rust.sh
+source install_neovim.sh
+source install_nerdfonts.sh
+source install_fd.sh
+source install_ripgrep.sh
+source install_lazygit.sh
+source install_nodejs.sh
 
 # Install pyright
 sudo npm install -g pyright
-
-# Stow lazyvim configuration
-cd ../stow
-stow -t $HOME nvim
