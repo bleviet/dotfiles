@@ -5,7 +5,7 @@ set -e
 
 # Install Starship prompt
 # The minimal, blazing-fast, and infinitely customizable prompt
-curl -sS https://starship.rs/install.sh | sh
+curl -sS https://starship.rs/install.sh | sh -s -- --yes
 
 # Define the init script line
 INIT_SCRIPT='eval "$(starship init bash)"'
