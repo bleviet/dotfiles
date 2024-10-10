@@ -21,3 +21,7 @@ alias gfa='git fetch --all --prune'
 alias gk='gitk'
 alias gka='gitk --all'
 alias lg='lazygit'
+
+# MISCELLANEOUS
+alias c='clear'
+alias src='source ~/.bashrc'
