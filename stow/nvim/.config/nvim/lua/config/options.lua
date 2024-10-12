@@ -13,3 +13,12 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   command = "setlocal formatoptions-=c formatoptions-=r formatoptions-=o",
 })
+
+-- Set systemrdl filetype and syntax highlighting
+vim.cmd([[
+  augroup systemrdl
+    autocmd!
+    autocmd BufRead,BufNewFile *.rdl set filetype=systemrdl
+    autocmd FileType systemrdl source ~/.config/nvim/syntax/systemrdl.vim
+  augroup END
+]])
