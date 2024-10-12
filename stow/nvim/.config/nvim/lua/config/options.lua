@@ -7,3 +7,9 @@ vim.g.root_spec = { "cwd" }
 
 -- replace telescope with fzf for picker
 vim.g.lazyvim_picker = "fzf"
+
+-- Disable auto comment insertion
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  command = "setlocal formatoptions-=c formatoptions-=r formatoptions-=o",
+})
