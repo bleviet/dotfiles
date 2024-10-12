@@ -1,7 +1,7 @@
 export NNN_PLUG='j:autojump;c:fzcd;o:fzopen'
 
 # Configure cd on exit
-n() {
+function n() {
   # Block nesting of nnn in subshells
   [ "${NNNLVL:-0}" -eq 0 ] || {
     echo "nnn is already running"

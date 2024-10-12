@@ -25,4 +25,4 @@ alias lg='lazygit'
 # MISCELLANEOUS
 alias c='clear'
 alias src='source ~/.bashrc'
-alias n='nnn'
+alias n='nnn -de'
