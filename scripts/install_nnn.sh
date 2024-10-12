@@ -9,7 +9,7 @@ git clone https://github.com/jarun/nnn.git
 
 # Step 3: Build the project
 cd nnn
-make
+make O_NERD=1
 
 # Step 4: Install the binary
 sudo make install
