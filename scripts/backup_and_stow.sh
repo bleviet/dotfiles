@@ -26,3 +26,6 @@ stow -t $HOME nvim
 # Stow tmux configuration
 echo "Stowing tmux configuration..."
 stow -t $HOME tmux
+
+# Return to scripts directory
+cd -
