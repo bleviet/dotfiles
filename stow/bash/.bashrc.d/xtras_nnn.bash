@@ -1,4 +1,4 @@
-export NNN_PLUG='j:autojump;c:fzcd;o:fzopen'
+export NNN_PLUG='z:autojump;f:fzcd;e:fzopen;d:diffs'
 
 # Configure cd on exit
 function n() {
