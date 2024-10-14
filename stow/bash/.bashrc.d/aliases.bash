@@ -20,7 +20,7 @@ alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gk='gitk'
 alias gka='gitk --all'
-alias lg='lazygit'
+alias gg='lazygit'
 
 # MISCELLANEOUS
 alias c='clear'
