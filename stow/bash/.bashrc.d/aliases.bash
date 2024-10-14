@@ -26,3 +26,8 @@ alias gg='lazygit'
 alias c='clear'
 alias src='source ~/.bashrc'
 alias n='nnn -de'
+
+# FZF
+alias f='fzf | tee >(xclip -sel clip)'
+alias fp="fzf --preview 'batcat --style=numbers --color=always {}' | tee >(xclip -sel clip)"
+alias fe='$EDITOR $(fzf)'
