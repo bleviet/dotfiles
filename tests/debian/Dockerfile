@@ -34,11 +34,11 @@ USER user
 # Copy files to the user's home directory
 COPY --chown=user:user scripts /home/user/dotfiles/scripts
 COPY --chown=user:user stow /home/user/dotfiles/stow
-COPY --chown=user:user setup_env.sh /home/user/dotfiles/setup_env.sh
+COPY --chown=user:user setup /home/user/dotfiles/setup
 
 # Set the working directory
 WORKDIR /home/user/dotfiles
 
 # Run the setup script as the non-root user
-RUN yes | bash setup_env.sh
+RUN yes | bash setup
 
