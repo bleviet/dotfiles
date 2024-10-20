@@ -5,6 +5,9 @@ sudo apt-get update && sudo apt-get install -y \
   file \
   fontconfig \
   git \
+  procps \
   stow \
+  unzip \
+  p7zip-full \
   wget \
   xclip
