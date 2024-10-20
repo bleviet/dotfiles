@@ -18,7 +18,7 @@ if ! command -v fzf >/dev/null 2>&1; then
   install_fzf
 fi
 
-# Initialize zoxide only if it is installed successfully or was already installed
+# Initialize fzf only if it is installed successfully or was already installed
 if command -v fzf >/dev/null 2>&1; then
   eval "$(fzf --bash)"
 fi
