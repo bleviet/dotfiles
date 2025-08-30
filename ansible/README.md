@@ -240,11 +240,56 @@ This `playbook.yml` file contains all the instructions to set up the VM, incorpo
         home-manager switch
       become_user: "{{ ansible_user }}"
       become: no
+
+    - name: Setup Distrobox for FPGA Development
+      block:
+        - name: Install Distrobox dependencies
+          apt:
+            name: "{{ item }}"
+            state: present
+          loop:
+            - podman
+            - curl
+
+        - name: Install Distrobox
+          shell: "curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo sh"
+          args:
+            creates: /usr/local/bin/distrobox
+
+        - name: Copy FPGA setup script to VM
+          copy:
+            src: scripts/fpga/setup_fpga_env.sh
+            dest: "/home/{{ ansible_user }}/setup_fpga_env.sh"
+            owner: "{{ ansible_user }}"
+            group: "{{ ansible_user }}"
+            mode: '0755'
+
+        - name: Create and setup FPGA development distrobox
+          shell: |
+            distrobox list | grep -q fpga-dev || distrobox create --name fpga-dev --image ubuntu:22.04
+            distrobox enter fpga-dev -- /bin/bash /home/{{ ansible_user }}/setup_fpga_env.sh
+          become_user: "{{ ansible_user }}"
+          become: no
+          args:
+            creates: "/home/{{ ansible_user }}/.fpga_setup_done"
 ```
 
 -----
 
-## Step 4: Run the Automation
+## Step 4: What's Included - The Full Setup
+
+When the playbook completes, your Debian VM will be configured with three layers of software, providing a stable, flexible, and powerful development environment:
+
+1.  **The Base System (Debian):** A clean, stable Debian base managed by the playbook.
+2.  **Your User Environment (Nix + Home Manager):** All your personal tools (editors, git, etc.) are installed declaratively via Nix and Home Manager, based on your dotfiles repository. This keeps your tools modern and your configuration reproducible.
+3.  **FPGA Development Lab (Distrobox):** A specialized environment for FPGA work.
+    *   **Isolated Container:** An Ubuntu 22.04 container named `fpga-dev` is created.
+    *   **GHDL Pre-installed:** The GHDL VHDL simulator is ready to use inside the container.
+    *   **Guided Tool Installation:** To get started with proprietary tools, enter the container (`distrobox enter fpga-dev`) and read the `README_FPGA_TOOLS.md` file in your home directory for instructions on installing Vivado and Quartus.
+
+-----
+
+## Step 5: Run the Automation
 
 Execute the playbook from your macOS terminal.
 
