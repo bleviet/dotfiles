@@ -1,0 +1,137 @@
+- name: Debian Entwickler-VM aufsetzen
+  hosts: vm
+  become: yes # Die meisten Tasks brauchen Root-Rechte
+
+  tasks:
+    - name: System-Abhängigkeiten installieren
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - curl
+        - git
+
+    - name: Nix-Paketmanager installieren
+      shell: "curl -L https://nixos.org/nix/install | sh -s -- --daemon"
+      args:
+        creates: /nix # Wird nur ausgeführt, wenn /nix nicht existiert
+
+    - name: Warten bis Nix-Daemon bereit ist
+      wait_for:
+        path: /nix/var/nix/daemon-socket/socket
+        timeout: 60
+
+    - name: Nix-Profile für User einrichten
+      shell: |
+        if [ ! -f "/home/{{ ansible_user }}/.nix-profile/etc/profile.d/nix.sh" ]; then
+          /nix/var/nix/profiles/default/bin/nix-env --install --attr nixpkgs.nix
+        fi
+      become_user: "{{ ansible_user }}"
+      become: no
+
+    - name: SSH-Verzeichnis für den User erstellen
+      file:
+        path: "/home/{{ ansible_user }}/.ssh"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0700'
+      become_user: "{{ ansible_user }}"
+      become: no
+
+    - name: Verschlüsselten Deploy Key auf die VM kopieren
+      copy:
+        src: dotfiles_key # Die mit Vault verschlüsselte Datei
+        dest: "/home/{{ ansible_user }}/.ssh/dotfiles_key"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0600'
+
+    - name: SSH-Konfiguration für GitHub erstellen
+      blockinfile:
+        path: "/home/{{ ansible_user }}/.ssh/config"
+        create: yes
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0600'
+        block: |
+          Host github.com
+            HostName github.com
+            User git
+            IdentityFile /home/{{ ansible_user }}/.ssh/dotfiles_key
+            IdentitiesOnly yes
+
+    - name: Dotfiles-Repository klonen
+      git:
+        repo: git@github.com:bleviet/dotfiles.git
+        dest: "/home/{{ ansible_user }}/.dotfiles"
+        version: test/nix
+        accept_hostkey: yes
+      become_user: "{{ ansible_user }}"
+      become: no
+
+    - name: Home Manager Channel hinzufügen
+      shell: |
+        . "/home/{{ ansible_user }}/.nix-profile/etc/profile.d/nix.sh"
+        nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+        nix-channel --update
+      become_user: "{{ ansible_user }}"
+      become: no
+      args:
+        creates: "/home/{{ ansible_user }}/.nix-channels"
+
+    - name: Home Manager installieren
+      shell: |
+        . "/home/{{ ansible_user }}/.nix-profile/etc/profile.d/nix.sh"
+        nix-shell '<home-manager>' -A install
+      become_user: "{{ ansible_user }}"
+      become: no
+      args:
+        creates: "/home/{{ ansible_user }}/.nix-profile/bin/home-manager"
+
+    - name: Home Manager Konfigurationsverzeichnis erstellen
+      file:
+        path: "/home/{{ ansible_user }}/.config/home-manager"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0755'
+      become_user: "{{ ansible_user }}"
+      become: no
+
+    - name: Home Manager Konfiguration kopieren und anpassen
+      copy:
+        src: "/home/{{ ansible_user }}/.dotfiles/home.nix"
+        dest: "/home/{{ ansible_user }}/.config/home-manager/home.nix"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0644'
+        remote_src: yes
+      become_user: "{{ ansible_user }}"
+      become: no
+
+    - name: Benutzerkonfiguration zu home.nix hinzufügen
+      lineinfile:
+        path: "/home/{{ ansible_user }}/.config/home-manager/home.nix"
+        insertafter: "^{"
+        line: "  home.username = \"{{ ansible_user }}\";"
+        state: present
+      become_user: "{{ ansible_user }}"
+      become: no
+
+    - name: Home-Verzeichnis Konfiguration zu home.nix hinzufügen
+      lineinfile:
+        path: "/home/{{ ansible_user }}/.config/home-manager/home.nix"
+        insertafter: "home.username"
+        line: "  home.homeDirectory = \"/home/{{ ansible_user }}\";"
+        state: present
+      become_user: "{{ ansible_user }}"
+      become: no
+
+    - name: Home Manager Konfiguration anwenden
+      shell: |
+        . "/home/{{ ansible_user }}/.nix-profile/etc/profile.d/nix.sh"
+        home-manager switch
+      become_user: "{{ ansible_user }}"
+      become: no
