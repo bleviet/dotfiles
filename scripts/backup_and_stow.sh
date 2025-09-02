@@ -1,31 +1,52 @@
 #!/bin/bash
 
-# Backup and stow bash configuration files
-[ -f $HOME/.bash_profile ] && mv $HOME/.bash_profile{,.bak}
-[ -f $HOME/.bashrc ] && mv $HOME/.bashrc{,.bak}
-[ -d $HOME/.bashrc.d ] && mv $HOME/.bashrc.d{,.bak}
+# Script to backup existing dotfiles and stow new configurations using GNU Stow
+
+# Define the stow directory relative to the script's location
+STOW_DIR="$(dirname "$0")/../stow"
+
+# Function to backup a file or directory if it exists
+backup_item() {
+  local item="$1"
+  if [ -e "$HOME/$item" ]; then
+    echo "Backing up $HOME/$item to $HOME/${item}.bak"
+    mv "$HOME/$item" "$HOME/${item}.bak"
+  fi
+}
+
+# Function to stow a package
+stow_package() {
+  local package="$1"
+  echo "Stowing $package configuration..."
+  if stow -t "$HOME" "$package"; then
+    echo "$package stowed successfully."
+  else
+    echo "Error: Failed to stow $package."
+    return 1
+  fi
+}
+
+# Backup bash configuration files
+backup_item ".bash_profile"
+backup_item ".bashrc"
+backup_item ".bashrc.d"
 
 # Backup LazyVim configuration
-[ -d $HOME/.config/nvim ] && mv $HOME/.config/nvim{,.bak}
-[ -d $HOME/.local/share/nvim ] && mv $HOME/.local/share/nvim{,.bak}
-[ -d $HOME/.local/state/nvim ] && mv $HOME/.local/state/nvim{,.bak}
-[ -d $HOME/.cache/nvim ] && mv $HOME/.cache/nvim{,.bak}
+backup_item ".config/nvim"
+backup_item ".local/share/nvim"
+backup_item ".local/state/nvim"
+backup_item ".cache/nvim"
 
 # Backup tmux configuration
-[ -f $HOME/.tmux.conf ] && mv $HOME/.tmux.conf{,.bak}
+backup_item ".tmux.conf"
 
-cd ../stow
-# Stow bash configuration files
-echo "Stowing bash configuration files..."
-stow -t $HOME bash
+# Change to stow directory
+cd "$STOW_DIR" || { echo "Error: Cannot change to stow directory."; exit 1; }
 
-# Stow LazyVim configuration
-echo "Stowing LazyVim configuration..."
-stow -t $HOME nvim
+# Stow configurations
+stow_package "bash"
+stow_package "nvim"
+stow_package "tmux"
 
-# Stow tmux configuration
-echo "Stowing tmux configuration..."
-stow -t $HOME tmux
-
-# Return to scripts directory
-cd -
+# Return to original directory
+cd - >/dev/null
