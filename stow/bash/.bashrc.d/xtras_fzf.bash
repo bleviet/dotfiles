@@ -1,4 +1,9 @@
-# Function to install fzf if it's not installed
+# Function to check if fzf is installed
+is_fzf_installed() {
+  command -v fzf >/dev/null 2>&1
+}
+
+# Function to install fzf
 install_fzf() {
   echo "Installing fzf..."
 
@@ -12,13 +17,19 @@ install_fzf() {
   fi
 }
 
-# Check if fzf is installed by looking for its executable
-if ! command -v fzf >/dev/null 2>&1; then
-  echo "fzf is not installed, attempting to install..."
-  install_fzf
-fi
+# Function to initialize fzf
+initialize_fzf() {
+  if is_fzf_installed; then
+    eval "$(fzf --bash)"
+  fi
+}
 
-# Initialize fzf only if it is installed successfully or was already installed
-if command -v fzf >/dev/null 2>&1; then
-  eval "$(fzf --bash)"
+# Main setup logic
+if ! is_fzf_installed; then
+  echo "fzf is not installed, attempting to install..."
+  if install_fzf; then
+    initialize_fzf
+  fi
+else
+  initialize_fzf
 fi

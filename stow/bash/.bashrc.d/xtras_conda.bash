@@ -1,7 +1,12 @@
 # Define the Miniconda installation path
 MINICONDA_PATH="$HOME/miniconda3"
 
-# Function to install Miniconda if it's not installed
+# Function to check if conda is installed
+is_conda_installed() {
+  command -v conda >/dev/null 2>&1
+}
+
+# Function to install Miniconda
 install_miniconda() {
   echo "Installing Miniconda..."
 
@@ -24,28 +29,34 @@ install_miniconda() {
   fi
 }
 
-# Check if Miniconda is installed by looking for the directory and conda command
-if ! command -v conda >/dev/null 2>&1; then
-  echo "Miniconda is not installed, attempting to install..."
-  install_miniconda
-fi
-
-# Initialize Miniconda only if it is installed successfully or was already installed
-if command -v conda >/dev/null 2>&1; then
-  # >>> conda initialize >>>
-  # !! Contents within this block are managed by 'conda init' !!
-  __conda_setup="$('$MINICONDA_PATH/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
-  if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-  else
-    if [ -f "$MINICONDA_PATH/etc/profile.d/conda.sh" ]; then
-      . "$MINICONDA_PATH/etc/profile.d/conda.sh"
+# Function to initialize Miniconda
+initialize_conda() {
+  if is_conda_installed; then
+    # >>> conda initialize >>>
+    # !! Contents within this block are managed by 'conda init' !!
+    __conda_setup="$('$MINICONDA_PATH/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
+    if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
     else
-      export PATH="$MINICONDA_PATH/bin:$PATH"
+      if [ -f "$MINICONDA_PATH/etc/profile.d/conda.sh" ]; then
+        . "$MINICONDA_PATH/etc/profile.d/conda.sh"
+      else
+        export PATH="$MINICONDA_PATH/bin:$PATH"
+      fi
     fi
+    unset __conda_setup
+    # <<< conda initialize <<<
+  else
+    echo "Warning: Miniconda is not available."
   fi
-  unset __conda_setup
-  # <<< conda initialize <<<
+}
+
+# Main setup logic
+if ! is_conda_installed; then
+  echo "Miniconda is not installed, attempting to install..."
+  if install_miniconda; then
+    initialize_conda
+  fi
 else
-  echo "Warning: Miniconda is not available."
+  initialize_conda
 fi

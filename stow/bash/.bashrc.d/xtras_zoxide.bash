@@ -1,4 +1,9 @@
-# Function to install zoxide if it's not installed
+# Function to check if zoxide is installed
+is_zoxide_installed() {
+  command -v zoxide >/dev/null 2>&1
+}
+
+# Function to install zoxide
 install_zoxide() {
   echo "Installing zoxide..."
 
@@ -12,13 +17,19 @@ install_zoxide() {
   fi
 }
 
-# Check if zoxide is installed
-if ! command -v zoxide >/dev/null 2>&1; then
-  echo "zoxide is not installed, attempting to install..."
-  install_zoxide
-fi
+# Function to initialize zoxide
+initialize_zoxide() {
+  if is_zoxide_installed; then
+    eval "$(zoxide init bash)"
+  fi
+}
 
-# Initialize zoxide only if it is installed successfully or was already installed
-if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init bash)"
+# Main setup logic
+if ! is_zoxide_installed; then
+  echo "zoxide is not installed, attempting to install..."
+  if install_zoxide; then
+    initialize_zoxide
+  fi
+else
+  initialize_zoxide
 fi
