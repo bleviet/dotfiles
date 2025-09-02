@@ -5,7 +5,7 @@ My personal dotfiles
 Run `setup`. That's it.
 
 ## What's included
-1. Terminal centric tools and configurations, use Homebrew as the package manager
+1. Terminal centric tools and configurations, use Nix as the package manager
 2. Lazyvim as the editor of choice
 3. Tmux for terminal multiplexing, mostly for remote work
 4. Personal dotfiles for bash, vim, tmux, etc. Installation of fzf, conda, and zoxide included

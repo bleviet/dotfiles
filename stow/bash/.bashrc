@@ -1,4 +1,7 @@
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Source Nix profile (replaces brew shellenv)
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  source ~/.nix-profile/etc/profile.d/nix.sh
+fi
 
 # Source all scripts in ~/.bashrc.d directory
 if [ -d "$HOME/.bashrc.d" ]; then
