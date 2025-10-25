@@ -18,6 +18,7 @@ brew install node
 brew install pyright
 
 # Bash utilities
+brew install starship
 brew install tmux
 brew install nnn
 brew install zoxide
