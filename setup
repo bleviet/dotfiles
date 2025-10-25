@@ -17,6 +17,9 @@ brew install lazygit
 brew install node
 brew install pyright
 
+# Python utilities
+brew install uv
+
 # Bash utilities
 brew install starship
 brew install tmux
