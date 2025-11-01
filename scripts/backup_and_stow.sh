@@ -31,6 +31,13 @@ backup_item ".bash_profile"
 backup_item ".bashrc"
 backup_item ".bashrc.d"
 
+# Backup zsh configuration files
+backup_item ".zshrc"
+backup_item ".zshrc.d"
+
+# Backup common shell configuration
+backup_item ".config/shell"
+
 # Backup LazyVim configuration
 backup_item ".config/nvim"
 backup_item ".local/share/nvim"
@@ -45,6 +52,8 @@ cd "$STOW_DIR" || { echo "Error: Cannot change to stow directory."; exit 1; }
 
 # Stow configurations
 stow_package "bash"
+stow_package "zsh"
+stow_package "common"
 stow_package "nvim"
 stow_package "tmux"
 

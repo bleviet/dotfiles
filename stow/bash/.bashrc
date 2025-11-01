@@ -7,6 +7,13 @@ if [ -d "$HOME/.bashrc.d" ]; then
   done
 fi
 
+# Source common shell configuration
+if [ -d "$HOME/.config/shell" ]; then
+  for file in "$HOME/.config/shell"/*.sh; do
+    [ -r "$file" ] && source "$file"
+  done
+fi
+
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 eval "$(starship init bash)"
