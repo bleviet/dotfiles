@@ -1,15 +1,18 @@
 #!/bin/bash
 
-# Function to check if Oh My Zsh is installed
+set -euo pipefail
+
+###############################################################################
+# scripts/install_ohmyzsh.sh
+# Purpose: install Oh My Zsh if missing
+###############################################################################
+
 is_ohmyzsh_installed() {
   [ -d "$HOME/.oh-my-zsh" ]
 }
 
-# Function to install Oh My Zsh
 install_ohmyzsh() {
   echo "Installing Oh My Zsh..."
-
-  # Run the Oh My Zsh installer script non-interactively
   if sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
     echo "Oh My Zsh successfully installed."
     return 0
@@ -19,7 +22,9 @@ install_ohmyzsh() {
   fi
 }
 
-# Main setup logic
+###############################################################################
+# Main
+###############################################################################
 if ! is_ohmyzsh_installed; then
   install_ohmyzsh
 else

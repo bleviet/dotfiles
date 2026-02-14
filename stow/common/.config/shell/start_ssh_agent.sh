@@ -1,5 +1,9 @@
-# Function to start the SSH agent and add keys
-function start_ssh_agent {
+###############################################################################
+# start_ssh_agent.sh
+# Purpose: start ssh-agent if necessary and add default key
+###############################################################################
+
+start_ssh_agent() {
   if [ -z "$SSH_AUTH_SOCK" ]; then
     eval "$(ssh-agent -s)"
   fi
@@ -9,5 +13,5 @@ function start_ssh_agent {
   fi
 }
 
-# Call the function to start the SSH agent and add keys
+# Auto-start the agent
 start_ssh_agent

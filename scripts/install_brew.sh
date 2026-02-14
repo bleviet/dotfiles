@@ -1,6 +1,15 @@
 #!/bin/bash
 
-# Function to update system package lists
+set -euo pipefail
+
+###############################################################################
+# scripts/install_brew.sh
+# Purpose: ensure system deps and install Homebrew when necessary
+###############################################################################
+
+###############################################################################
+# System update
+###############################################################################
 update_system() {
   echo "Updating system package lists..."
   if ! sudo apt update -y; then
@@ -9,7 +18,9 @@ update_system() {
   fi
 }
 
-# Function to install required dependencies
+###############################################################################
+# Install minimal build dependencies
+###############################################################################
 install_dependencies() {
   echo "Installing required dependencies..."
   if ! sudo apt install -y build-essential curl file git; then
@@ -18,16 +29,16 @@ install_dependencies() {
   fi
 }
 
-# Function to check if Homebrew is installed
+###############################################################################
+# Homebrew helpers
+###############################################################################
 is_brew_installed() {
   command -v brew >/dev/null 2>&1
 }
 
-# Function to install Homebrew
 install_brew() {
   echo "Installing Homebrew..."
   if /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
-    # Apply the changes to the current session
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     echo "Homebrew installation complete!"
     return 0
@@ -37,7 +48,6 @@ install_brew() {
   fi
 }
 
-# Function to verify Homebrew installation
 verify_brew() {
   echo "Verifying Homebrew installation..."
   if brew --version; then
@@ -48,7 +58,9 @@ verify_brew() {
   fi
 }
 
-# Main installation logic
+###############################################################################
+# Main
+###############################################################################
 update_system || exit 1
 install_dependencies || exit 1
 

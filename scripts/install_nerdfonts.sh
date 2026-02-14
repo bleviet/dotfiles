@@ -1,13 +1,20 @@
 #!/bin/bash
 
-# Ensure the script exits if any command fails
-set -e
+set -euo pipefail
 
-# Function to download and install a Nerd Font
+###############################################################################
+# scripts/install_nerdfonts.sh
+# Purpose: download and install selected Nerd Fonts into the user's font dir
+###############################################################################
+
+###############################################################################
+# Helper: download and install a single Nerd Font
+###############################################################################
 install_nerd_font() {
   local font_name="$1"
   local url="$2"
-  local temp_dir=$(mktemp -d)
+  local temp_dir
+  temp_dir=$(mktemp -d)
 
   echo "Installing $font_name Nerd Font..."
 
@@ -33,10 +40,11 @@ install_nerd_font() {
   echo "$font_name Nerd Font installed successfully!"
 }
 
-# URLs for FireCode and Hack Nerd Fonts
-FIRECODE_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip"
+###############################################################################
+# Fonts to install
+###############################################################################
+FIRA_CODE_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip"
 HACK_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip"
 
-# Install the fonts
-install_nerd_font "FireCode" "$FIRECODE_URL"
+install_nerd_font "FiraCode" "$FIRA_CODE_URL"
 install_nerd_font "Hack" "$HACK_URL"

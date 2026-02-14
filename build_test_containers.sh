@@ -2,7 +2,14 @@
 
 set -euo pipefail
 
-# Function to display help message
+###############################################################################
+# build_test_containers.sh
+# Purpose: build test Docker images for supported distros (debian/ubuntu)
+###############################################################################
+
+###############################################################################
+# Help / Usage
+###############################################################################
 function show_help {
   echo "Usage: $0 [options]"
   echo "Options:"
@@ -13,13 +20,17 @@ function show_help {
   exit 0
 }
 
-# Check for command-line arguments
+###############################################################################
+# Argument handling
+###############################################################################
 if [[ $# -eq 0 ]]; then
   echo "No options provided. Use -h or --help for usage information."
   exit 1
 fi
 
-# Parse command-line arguments
+###############################################################################
+# Command dispatch
+###############################################################################
 for arg in "$@"; do
   case $arg in
   -d | --debian)
@@ -45,4 +56,7 @@ for arg in "$@"; do
   esac
 done
 
+###############################################################################
+# Finish
+###############################################################################
 echo "Done!"
