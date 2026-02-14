@@ -16,7 +16,10 @@ fi
 
 eval "$(starship init bash)"
 
-# Main setup logic
-if is_zoxide_installed; then
-  initialize_zoxide
+if command -v fzf >/dev/null 2>&1; then
+  eval "$(fzf --bash)"
+fi
+
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init bash)"
 fi

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Function to display help message
 function show_help {
   echo "Usage: $0 [options]"
@@ -22,19 +24,16 @@ for arg in "$@"; do
   case $arg in
   -d | --debian)
     echo "Building Debian Docker image..."
-    docker build -t test-debian -f tests/debian/Dockerfile .
-    shift # Remove the argument
+    docker build --build-arg BASE_IMAGE=debian:latest -t test-debian -f tests/Dockerfile .
     ;;
   -u | --ubuntu)
     echo "Building Ubuntu Docker image..."
-    docker build -t test-ubuntu -f tests/ubuntu/Dockerfile .
-    shift # Remove the argument
+    docker build --build-arg BASE_IMAGE=ubuntu:latest -t test-ubuntu -f tests/Dockerfile .
     ;;
   -a | --all)
     echo "Building both Docker images..."
-    docker build -t test-debian -f tests/debian/Dockerfile .
-    docker build -t test-ubuntu -f tests/ubuntu/Dockerfile .
-    shift # Remove the argument
+    docker build --build-arg BASE_IMAGE=debian:latest -t test-debian -f tests/Dockerfile .
+    docker build --build-arg BASE_IMAGE=ubuntu:latest -t test-ubuntu -f tests/Dockerfile .
     ;;
   -h | --help)
     show_help

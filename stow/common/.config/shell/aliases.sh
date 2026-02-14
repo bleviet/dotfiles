@@ -25,7 +25,6 @@ alias gg='lazygit'
 # MISCELLANEOUS
 alias c='clear'
 alias src='source ~/.bashrc'
-alias n='nnn -de'
 
 # FZF
 alias f='fzf | tee >(xclip -sel clip)'
