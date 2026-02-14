@@ -24,12 +24,3 @@ initialize_zoxide() {
   fi
 }
 
-# Main setup logic
-if ! is_zoxide_installed; then
-  echo "zoxide is not installed, attempting to install..."
-  if install_zoxide; then
-    initialize_zoxide
-  fi
-else
-  initialize_zoxide
-fi

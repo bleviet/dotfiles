@@ -14,6 +14,9 @@ if [ -d "$HOME/.config/shell" ]; then
   done
 fi
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 eval "$(starship init bash)"
+
+# Main setup logic
+if is_zoxide_installed; then
+  initialize_zoxide
+fi
