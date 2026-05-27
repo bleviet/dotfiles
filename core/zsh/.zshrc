@@ -1,3 +1,8 @@
+# Load local environment settings & feature flags first
+if [ -r "$HOME/.dotfiles.local" ]; then
+  source "$HOME/.dotfiles.local"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -94,7 +99,14 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Detect and initialize Homebrew
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -x "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x "/usr/local/bin/brew" ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 # Source all scripts in ~/.zshrc.d directory
 if [ -d "$HOME/.zshrc.d" ]; then

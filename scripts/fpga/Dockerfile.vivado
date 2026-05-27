@@ -1,0 +1,77 @@
+# scripts/fpga/Dockerfile.vivado
+# Purpose: Base Docker image for Vivado 2025.2 running on Ubuntu 24.04 with GUI and JTAG forwarding
+
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Berlin
+
+# Install system dependencies, Vivado GUI libraries, and JTAG dependencies
+RUN apt-get update && apt-get install -y \
+    bash \
+    build-essential \
+    curl \
+    file \
+    git \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    libxtst6 \
+    libxi6 \
+    libglib2.0-0 \
+    libsm6 \
+    libice6 \
+    libxft2 \
+    libxinerama1 \
+    libxcursor1 \
+    libxrandr2 \
+    libxss1 \
+    libasound2t64 \
+    libusb-1.0-0 \
+    libusb-1.0-0-dev \
+    locales \
+    python3 \
+    python3-pip \
+    tar \
+    unzip \
+    wget \
+    xterm \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up locale
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
+# Build-time arguments to match the host user's UID and GID
+# This prevents file permission issues when writing to volume mounts
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+# Create developer group and user matching the host user
+RUN groupadd -g ${GROUP_ID} developer && \
+    useradd -u ${USER_ID} -g developer -m -s /bin/bash developer && \
+    echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Create standard directories for FPGA tools
+RUN mkdir -p /opt/fpga-tools && chown -R developer:developer /opt/fpga-tools
+
+USER developer
+WORKDIR /home/developer
+
+# Setup our bootstrap dotfiles inside the container to give the user a consistent environment!
+COPY --chown=developer:developer core /home/developer/dotfiles/core
+COPY --chown=developer:developer os /home/developer/dotfiles/os
+COPY --chown=developer:developer host /home/developer/dotfiles/host
+COPY --chown=developer:developer scripts /home/developer/dotfiles/scripts
+COPY --chown=developer:developer bootstrap.sh /home/developer/dotfiles/bootstrap.sh
+COPY --chown=developer:developer install.sh /home/developer/dotfiles/install.sh
+
+# Run bootstrap inside the container to configure the shell
+RUN cd /home/developer/dotfiles && ./bootstrap.sh
+
+# Set the default shell and execution path
+ENV PATH="/opt/fpga-tools/Vivado/latest/bin:${PATH}"
+
+CMD ["/bin/bash"]

@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+# Check if GUI support is disabled by feature flag
+if [[ "${DOTFILES_FEATURE_GUI:-1}" == "0" ]]; then
+  echo "GUI features are disabled (DOTFILES_FEATURE_GUI=0). Skipping Nerd Fonts installation."
+  exit 0
+fi
+
 ###############################################################################
 # scripts/install_nerdfonts.sh
 # Purpose: download and install selected Nerd Fonts into the user's font dir

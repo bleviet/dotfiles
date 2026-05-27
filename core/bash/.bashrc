@@ -1,7 +1,20 @@
 ###############################################################################
+# Local environment / Feature flags
+###############################################################################
+if [ -r "$HOME/.dotfiles.local" ]; then
+  source "$HOME/.dotfiles.local"
+fi
+
+###############################################################################
 # Homebrew environment
 ###############################################################################
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -x "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x "/usr/local/bin/brew" ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 ###############################################################################
 # Load per-shell snippets
@@ -42,3 +55,6 @@ fi
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init bash)"
 fi
+
+# Added by Antigravity CLI installer
+export PATH="/home/balevision/.local/bin:$PATH"
