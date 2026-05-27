@@ -27,9 +27,16 @@ echo "Hostname: $MY_HOSTNAME"
 ###############################################################################
 backup_item() {
   local item="$1"
-  if [ -e "$HOME/$item" ] && [ ! -L "$HOME/$item" ]; then
-    echo "Backing up $HOME/$item to $HOME/${item}.bak"
-    mv "$HOME/$item" "$HOME/${item}.bak"
+  if [ -L "$HOME/$item" ]; then
+    echo "Removing old/dangling symlink: $HOME/$item"
+    rm -f "$HOME/$item"
+  elif [ -e "$HOME/$item" ]; then
+    local timestamp
+    timestamp=$(date +%Y%m%d_%H%M%S)
+    local backup_path="${item}.bak.${timestamp}"
+    echo "Backing up $HOME/$item to $HOME/${backup_path}"
+    mkdir -p "$(dirname "$HOME/${backup_path}")"
+    mv "$HOME/$item" "$HOME/${backup_path}"
   fi
 }
 
