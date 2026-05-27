@@ -1,5 +1,5 @@
-# Rocky Linux-specific shell configurations
-# Sourced automatically in Rocky/RHEL environments
+# AlmaLinux-specific shell configurations
+# Sourced automatically in AlmaLinux/RHEL environments
 
 alias dnf-install="sudo dnf install -y"
 alias dnf-update="sudo dnf update -y"

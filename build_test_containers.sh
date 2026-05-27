@@ -14,7 +14,7 @@ show_help() {
   echo "Options:"
   echo "  -d,   --debian      Build & smoke test Debian Latest"
   echo "  -u,   --ubuntu      Build & smoke test Ubuntu Latest"
-  echo "  -r,   --rocky       Build & smoke test Rocky Linux Latest (10)"
+  echo "  -l,   --almalinux   Build & smoke test AlmaLinux OS Latest (10)"
   echo "  -a,   --all         Build & smoke test all supported distros"
   echo "  -h,   --help        Display this help message"
   exit 0
@@ -47,9 +47,9 @@ run_smoke_test() {
   }
 
   # Verify OS-specific configurations were stowed
-  if [[ "$distro_name" == *"Rocky"* ]]; then
-    docker run --rm "$image_tag" ls -la /home/user/.config/shell/ | grep -q "os_rocky" || {
-      echo "❌ Fail: Rocky OS-specific aliases were not stowed!"
+  if [[ "$distro_name" == *"AlmaLinux"* ]]; then
+    docker run --rm "$image_tag" ls -la /home/user/.config/shell/ | grep -q "os_almalinux" || {
+      echo "❌ Fail: AlmaLinux OS-specific aliases were not stowed!"
       return 1
     }
   elif [[ "$distro_name" == *"Debian"* ]]; then
@@ -91,14 +91,14 @@ for arg in "$@"; do
     -u|--ubuntu)
       build_and_test "ubuntu:latest" "test-ubuntu" "Ubuntu Latest"
       ;;
-    -r|--rocky)
-      build_and_test "rockylinux/rockylinux:10" "test-rocky" "Rocky Linux Latest (10)"
+    -l|--almalinux)
+      build_and_test "almalinux:10" "test-almalinux" "AlmaLinux OS Latest"
       ;;
     -a|--all)
       echo "Running build for all supported distro versions..."
       build_and_test "debian:stable" "test-debian" "Debian Latest"
       build_and_test "ubuntu:latest" "test-ubuntu" "Ubuntu Latest"
-      build_and_test "rockylinux/rockylinux:10" "test-rocky" "Rocky Linux Latest (10)"
+      build_and_test "almalinux:10" "test-almalinux" "AlmaLinux OS Latest"
       ;;
     -h|--help)
       show_help

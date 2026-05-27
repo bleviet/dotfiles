@@ -20,7 +20,7 @@ The repository is structured to separate core global configurations from OS-spec
 ├── os/                          # OS-specific packages stowed dynamically
 │   ├── debian/                  # Debian package shortcuts & aliases
 │   ├── ubuntu/                  # Ubuntu snaps & apt profiles
-│   └── rocky/                   # Rocky/RHEL dnf profile overrides
+│   └── almalinux/               # AlmaLinux/RHEL dnf profile overrides
 ├── host/                        # Machine-specific directories
 │   ├── debian-laptop/           # Laptop battery & display profiles
 │   └── debian-workstation/      # Workstation computation & GPU options
@@ -34,7 +34,7 @@ The repository is structured to separate core global configurations from OS-spec
 
 ## 🚀 How to Install & Bootstrap
 
-You can bootstrap this repository in a fresh environment (Debian/Ubuntu, Rocky Linux, or macOS) with one command.
+You can bootstrap this repository in a fresh environment (Debian/Ubuntu, AlmaLinux, or macOS) with one command.
 
 ### Local Installation / Bootstrapping
 Clone this repository and run the entrypoint script:
@@ -45,7 +45,7 @@ cd ~/dotfiles
 
 `bootstrap.sh` performs the following actions:
 1. Detects your OS family and native package manager (`apt-get`, `dnf`, or `brew`).
-2. Configures Rocky EPEL repositories if stowing tools are missing.
+2. Configures AlmaLinux EPEL repositories if stowing tools are missing.
 3. Installs minimal dependencies (`git`, `stow`, `curl`, `python3`).
 4. Invokes the second stage (`install.sh`), which:
    - Configures default feature flags in `~/.dotfiles.local`.
@@ -81,7 +81,7 @@ To build and run smoke tests on all container targets, run:
 Supported test environments:
 *   `debian:stable`
 *   `ubuntu:latest`
-*   `rockylinux/rockylinux:10`
+*   `almalinux:10`
 
 ---
 
