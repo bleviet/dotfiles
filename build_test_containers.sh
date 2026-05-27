@@ -12,13 +12,10 @@ echo "========================================="
 show_help() {
   echo "Usage: $0 [options]"
   echo "Options:"
-  echo "  -d,   --debian      Build & smoke test Debian Stable"
-  echo "  -u20, --ubuntu20    Build & smoke test Ubuntu 20.04"
-  echo "  -u22, --ubuntu22    Build & smoke test Ubuntu 22.04"
-  echo "  -r8,  --rocky8      Build & smoke test Rocky Linux 8"
-  echo "  -r9,  --rocky9      Build & smoke test Rocky Linux 9"
-  echo "  -r10, --rocky10     Build & smoke test Rocky Linux 10"
-  echo "  -a,   --all         Build & smoke test the entire matrix"
+  echo "  -d,   --debian      Build & smoke test Debian Latest"
+  echo "  -u,   --ubuntu      Build & smoke test Ubuntu Latest"
+  echo "  -r,   --rocky       Build & smoke test Rocky Linux Latest (10)"
+  echo "  -a,   --all         Build & smoke test all supported distros"
   echo "  -h,   --help        Display this help message"
   exit 0
 }
@@ -89,32 +86,19 @@ fi
 for arg in "$@"; do
   case $arg in
     -d|--debian)
-      build_and_test "debian:stable" "test-debian" "Debian Stable"
+      build_and_test "debian:stable" "test-debian" "Debian Latest"
       ;;
-    -u20|--ubuntu20)
-      build_and_test "ubuntu:20.04" "test-ubuntu20" "Ubuntu 20.04"
+    -u|--ubuntu)
+      build_and_test "ubuntu:latest" "test-ubuntu" "Ubuntu Latest"
       ;;
-    -u22|--ubuntu22)
-      build_and_test "ubuntu:22.04" "test-ubuntu22" "Ubuntu 22.04"
-      ;;
-    -r8|--rocky8)
-      build_and_test "rockylinux:8" "test-rocky8" "Rocky Linux 8"
-      ;;
-    -r9|--rocky9)
-      build_and_test "rockylinux:9" "test-rocky9" "Rocky Linux 9"
-      ;;
-    -r10|--rocky10)
-      # Pull from official rockylinux namespace if rockylinux:10 is not available shorthand
-      build_and_test "rockylinux/rockylinux:10" "test-rocky10" "Rocky Linux 10"
+    -r|--rocky)
+      build_and_test "rockylinux/rockylinux:10" "test-rocky" "Rocky Linux Latest (10)"
       ;;
     -a|--all)
-      echo "Running full test matrix build..."
-      build_and_test "debian:stable" "test-debian" "Debian Stable"
-      build_and_test "ubuntu:20.04" "test-ubuntu20" "Ubuntu 20.04"
-      build_and_test "ubuntu:22.04" "test-ubuntu22" "Ubuntu 22.04"
-      build_and_test "rockylinux:8" "test-rocky8" "Rocky Linux 8"
-      build_and_test "rockylinux:9" "test-rocky9" "Rocky Linux 9"
-      build_and_test "rockylinux/rockylinux:10" "test-rocky10" "Rocky Linux 10"
+      echo "Running build for all supported distro versions..."
+      build_and_test "debian:stable" "test-debian" "Debian Latest"
+      build_and_test "ubuntu:latest" "test-ubuntu" "Ubuntu Latest"
+      build_and_test "rockylinux/rockylinux:10" "test-rocky" "Rocky Linux Latest (10)"
       ;;
     -h|--help)
       show_help

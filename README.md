@@ -80,10 +80,7 @@ To build and run smoke tests on all container targets, run:
 
 Supported test environments:
 *   `debian:stable`
-*   `ubuntu:20.04`
-*   `ubuntu:22.04`
-*   `rockylinux:8`
-*   `rockylinux:9`
+*   `ubuntu:latest`
 *   `rockylinux/rockylinux:10`
 
 ---
