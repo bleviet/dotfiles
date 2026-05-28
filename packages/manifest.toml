@@ -1,0 +1,73 @@
+# packages/manifest.toml
+# Single source of truth for all package declarations.
+# Consumed by packages/install.py — run with --dry-run to preview.
+#
+# bootstrap.sh installs a minimal seed set before Python is available;
+# those packages are listed below for reference but cannot be driven
+# by install.py due to the bootstrap ordering constraint.
+
+# ── Bootstrap packages (reference only) ──────────────────────────────────────
+# Installed inline by bootstrap.sh; Python is not yet available at that stage.
+#
+#   apt: git curl stow python3-minimal
+#   dnf: epel-release git curl stow python3
+#   macos: git stow python  (via Homebrew)
+
+# ── System packages ───────────────────────────────────────────────────────────
+# Installed via the native OS package manager (apt / dnf).
+# "common" names are identical across all supported systems.
+
+[system]
+common = [
+  "bat",
+  "curl",
+  "file",
+  "fontconfig",
+  "git",
+  "procps",
+  "stow",
+  "unzip",
+  "wget",
+]
+
+[system.apt]
+extra = ["p7zip-full", "xclip"]
+
+[system.dnf]
+extra = ["p7zip", "xclip"]
+
+# ── Homebrew build dependencies ───────────────────────────────────────────────
+# Linux-only: required to compile Homebrew before it can be installed.
+# curl / file / git are already covered by system.common above.
+
+[brew_build_deps]
+apt       = ["build-essential"]
+dnf_group = "Development Tools"
+
+# ── Homebrew formulae ─────────────────────────────────────────────────────────
+
+[brew]
+formulae = [
+  "eza",
+  "fd",
+  "fzf",
+  "lazygit",
+  "neovim",
+  "node",
+  "pyright",
+  "ripgrep",
+  "rust",
+  "starship",
+  "tmux",
+  "uv",
+  "yazi",
+  "zoxide",
+]
+
+# ── Feature-gated packages ────────────────────────────────────────────────────
+# Activated by DOTFILES_FEATURE_* flags written to ~/.dotfiles.local.
+
+[features.fpga]
+brew = []
+apt  = []
+dnf  = []

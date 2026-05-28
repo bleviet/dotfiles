@@ -4,34 +4,20 @@
 
 set -euo pipefail
 
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=scripts/lib.sh
+source "$ROOT_DIR/scripts/lib.sh"
+
 echo "========================================="
 echo "   Bootstrapping Dotfiles Environment    "
 echo "========================================="
 
 # 1. Detect OS
-OS_ID="unknown"
-if [ -f /etc/os-release ]; then
-  . /etc/os-release
-  OS_ID=$ID
-elif [ "$(uname)" = "Darwin" ]; then
-  OS_ID="macos"
-fi
-
+# Packages installed here are the bootstrap seed (git, curl, stow, python3)
+# listed in packages/manifest.toml [bootstrap] for reference.
+# They must be hardcoded here because Python is not yet available.
+OS_ID="$(detect_os)"
 echo "Detected OS: $OS_ID"
-
-# Helper function to run commands as root
-run_as_root() {
-  if [ "$EUID" -ne 0 ]; then
-    if command -v sudo >/dev/null 2>&1; then
-      sudo "$@"
-    else
-      echo "Error: root privileges are required to install dependencies but 'sudo' is not available."
-      exit 1
-    fi
-  else
-    "$@"
-  fi
-}
 
 # 2. Install minimal packages based on OS
 case "$OS_ID" in
@@ -69,17 +55,14 @@ case "$OS_ID" in
 esac
 
 # 3. Launch Second Stage Installer (install.sh)
-ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$ROOT_DIR"
-
-if [ -f "./install.sh" ]; then
+if [ -f "$ROOT_DIR/install.sh" ]; then
   echo "Launching second stage installer (install.sh)..."
-  chmod +x ./install.sh
-  ./install.sh
-elif [ -f "./setup" ]; then
+  chmod +x "$ROOT_DIR/install.sh"
+  "$ROOT_DIR/install.sh"
+elif [ -f "$ROOT_DIR/setup" ]; then
   echo "Launching setup script..."
-  chmod +x ./setup
-  ./setup
+  chmod +x "$ROOT_DIR/setup"
+  "$ROOT_DIR/setup"
 else
   echo "Error: Neither install.sh nor setup script was found!"
   exit 1
